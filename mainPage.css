@@ -10,6 +10,8 @@
   font-family:'Courier New', monospace;
   font-size:20px;
   text-align: left;
+  position:relative;
+  left: 10px;
 }
 
 .caption {
@@ -55,7 +57,7 @@
   color: white;
 }
 
-.container{  
+.container {  
 text-align: center;
 padding-top: 100px;
 }
@@ -85,4 +87,27 @@ padding-top: 100px;
   background-color: #32a852;
   color: white;
   transition-duration: 0.5s;
+}
+
+#players {
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  border-collapse: collapse;
+  width: 100%;
+  background-color: #202124;
+}
+
+#players td, #players th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#players tr:hover {background-color: #353535;}
+
+#players th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #32a852;
+  color: white;
 }
