@@ -92,11 +92,6 @@ xmlhttp.send();*/
 
 let players = parseData(readTextFile("data.txt"));
 
-
-
-
-
-
 let table = document.querySelector("table");
 let data = Object.keys(players[0]);
 generateTableHead(table, data);
