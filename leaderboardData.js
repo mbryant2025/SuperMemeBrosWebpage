@@ -1,25 +1,3 @@
-let players = [
-  { player: 'ashley', time: '53', date: '12/3/21' },
-  { player: 'michael', time: '189', date: '12/5/21' },
-  { player: 'michael', time: '542', date: '12/5/21' },
-  { player: 'ashley', time: '4', date: '12/3/21' },
-  { player: 'ashley', time: '53', date: '12/3/21' },
-  { player: 'michael', time: '189', date: '12/5/21' },
-  { player: 'michael', time: '189', date: '12/5/21' },
-  { player: 'ashley', time: '53', date: '12/3/21' },
-  { player: 'michael', time: '189', date: '12/5/21' },
-  { player: 'michael', time: '189', date: '12/5/21' },
-  { player: 'ashley', time: '53', date: '12/3/21' },
-  { player: 'michael', time: '189', date: '12/5/21' },
-  { player: 'michael', time: '189', date: '12/5/21' },
-  { player: 'ashley', time: '53', date: '12/3/21' },
-  { player: 'michael', time: '189', date: '12/5/21' },
-  { player: 'michael', time: '189', date: '12/5/21' },
-  { player: 'michael', time: '54253', date: '12/5/21' },
-  { player: 'michael', time: '189', date: '12/5/21' },
-  { player: 'bob', time: '1859', date: '12/5/21' }
-];
-
 function generateTableHead(table, data) {
   let thead = table.createTHead();
   let row = thead.insertRow();
@@ -42,44 +20,84 @@ function generateTable(table, data) {
   }
 }
 
+function readTextFile(file)
+{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, false);
+    var allText;
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                allText = rawFile.responseText;
+            }
+        }
+    }
+    rawFile.send(null);
 
-function convertTime(time) {
-  let hours = parseInt(parseInt(time) / 3600);
-  let minutes = parseInt(((parseInt(time) - hours * 3600) / 60));
-  let seconds = parseInt(parseInt(time) % 60);
-  
-  let ret = "";
-
-  if(hours > 0) {
-    ret += hours + ":";
-  }
-  if(minutes < 10) {
-    ret += "0" + minutes + ":";
-  }
-  else {
-    ret += minutes + ":";
-  }
-  if(seconds < 10) {
-    ret += "0" + seconds;
-  }
-  else {
-    ret += seconds;
-  }
-
-  return ret;
+    return allText;
 }
 
-players.sort(function(a,b) {
-  return a.time - b.time
-});
+function parseData(input) {
 
-players = players.slice(0, 10);
+  let arr = input.split("[");
 
-for(let element of players) {
-  element.time = convertTime(element.time);
+  let formattedArr = [];
+
+  for(let entry of arr) {
+      if(entry == '') {
+          continue;
+      }
+      while(entry.indexOf('\"') > -1) {
+          entry = entry.replace('\"', '');
+      }
+      while(entry.indexOf(']') > -1) {
+          entry = entry.replace(']', '');
+      }
+      formattedArr.push(entry);
+  }
+
+  let subArrs = []
+
+  for(let entry of formattedArr) {
+      subArrs.push(entry.split(", ").slice(0,3));
+  }
+
+  let dicts = [];
+
+  for(let entry of subArrs) {
+      let dict = {player: entry[0], score: entry[1], date: entry[2]};
+      dicts.push(dict);
+  }
+
+  return dicts;
 }
+
+
+
+
+/*let xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+    //document.getElementById("txtHint").innerHTML=xmlhttp.responseText;
+    }
+  }
+xmlhttp.open("GET","fetchData.py",true);
+xmlhttp.send();*/
+
+
+let players = parseData(readTextFile("data.txt"));
+
+
+
+
+
 
 let table = document.querySelector("table");
 let data = Object.keys(players[0]);
-generateTable(table, players);
 generateTableHead(table, data);
+generateTable(table, players);
